@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">    
+    <h:head>
+    </h:head>
+    <h:body>
+        <ui:composition template="../templates/admin-template.xhtml">
+            <ui:define name="title">
+                Reporting Store State
+            </ui:define>
+
+            <ui:define name="left">
+                <ui:include src="../templates/admin-left-bar.xhtml" />
+            </ui:define>
+            <ui:define name="content">
+                <div class="search-area">
+                    <h:form>
+                        <p:defaultCommand target="searchcommand" />
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <h:commandLink id="searchcommand" action="#{storeReportBean.search}" 
+                                               class="btn btn-primary curved searchbar" >
+                                    <span><i class="fa fa-search"></i></span>
+                                </h:commandLink>
+                            </span>    
+                            <h:inputText value="#{storeReportBean.searchRequest}" 
+                                         class="searchbar curved form-control" />
+                        </div> 
+                    </h:form>   
+                    
+                    <div class="row">
+                        <h3 class="col-md-offset-6 col-md-6">Store Report</h3>
+                    </div>
+                </div>
+                
+                <div class="result-area">
+                    <h:panelGroup id="result">
+                        <h:panelGroup rendered="#{not empty storeReportBean.reportData}">
+                            <p:dataTable rows="10" value="#{storeReportBean.reportData}" var="data" 
+                                         paginator="true" 
+                                         paginatorPosition="bottom"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="10,15"
+                                         class="curved">
+                                <f:facet name="header">
+                                    <h:outputText value="Store Reporting " />
+                                </f:facet>
+                                    
+                                <p:column>
+                                    <div>
+                                        <f:facet name="header">
+                                            Product Name
+                                        </f:facet>
+                                        <h:outputText value="#{jsfUtils.capitalize(data.name)}" />
+                                    </div> 
+                                </p:column>
+                                
+                                <p:column>
+                                    <div>
+                                        <f:facet name="header">
+                                            Available In Stock
+                                        </f:facet>
+                                        <h:outputText value="#{data.inStock}" />
+                                    </div>
+                                </p:column>
+                                
+                                <p:column>
+                                    <div>
+                                        <f:facet name="header">
+                                            Treshold Recharge(Items)
+                                        </f:facet>
+                                        <h:outputText value="#{data.rechargeAt}" />
+                                    </div>
+                                </p:column>
+                                
+                                <p:column>
+                                    <div>
+                                        <f:facet name="header">
+                                            Perentage Off(Remise)
+                                        </f:facet>
+                                        <h:outputText value="#{data.percentageOff} %" />
+                                    </div>
+                                </p:column>
+                                
+                                <p:column>
+                                    <div>
+                                        <f:facet name="header">
+                                            Last Updated
+                                        </f:facet>
+                                        <h:outputText value="#{data.lastUpdated}" />
+                                    </div>
+                                </p:column>
+                                
+                                <p:column>
+                                    <div>
+                                        <f:facet name="header">
+                                            Recharge And Update
+                                        </f:facet>
+                                        <h:form>
+                                            <h:commandButton value="Recharge" 
+                                                             action="#{storeReportBean.updateThisProduct(data.id)}" >
+                                            </h:commandButton>
+                                        </h:form>
+                                    </div>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </div>
+                <div>
+                    <h:panelGroup rendered="#{storeReportBean.renderUpdateForm}">
+                        <h:form class="form-horizontal">
+                            <div id="myModal" class="modal fade" tabindex="-1" role="dialog" data-show="true">
+                                <div class="modal-dialog product-update" role="document">
+                                    <div class="modal-content">
+                                        <div  class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                                            <h4 class="modal-title">Update Product In Stock</h4>
+                                        </div>
+                                        <div  class="modal-body center-block">
+                                            <div class="form-group">
+                                                <h4>Number Of '#{jsfUtils.capitalize(storeReportBean.toUpdatePro.name)}' In Stock</h4>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <h:outputLabel class="control-label col-sm-2" for="instock">
+                                                    Items To Add
+                                                </h:outputLabel>
+                                                <div class="col-sm-8">
+                                                    <h:inputText label="instock" id="instock" class="form-control" 
+                                                                 value="#{storeReportBean.toUpdatePro.inStock}" >
+                                                    </h:inputText> 
+                                                    <h:message for="instock" showDetail="true" showSummary="false" styleClass="alert alert-danger" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <h:outputLabel class="control-label col-sm-2" for="rechargeAt">
+                                                    Recharge Treshold
+                                                </h:outputLabel>
+                                                <div class="col-sm-8">
+                                                    <h:inputText label="rechargeAt" id="rechargeAt" class="form-control" 
+                                                                 value="#{storeReportBean.toUpdatePro.rechargeAt}" >
+                                                    </h:inputText> 
+                                                    <h:message for="rechargeAt" showDetail="true" showSummary="false" styleClass="alert alert-danger" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <h:outputLabel class="control-label col-sm-2" for="percentageOff">
+                                                    Percentage Off
+                                                </h:outputLabel>
+                                                <div class="col-sm-8">
+                                                    <h:inputText label="percentageOff" id="percentageOff" class="form-control" 
+                                                                 value="#{storeReportBean.toUpdatePro.percentageOff}" >
+                                                    </h:inputText> 
+                                                    <h:message for="percentageOff" showDetail="true" showSummary="false" styleClass="alert alert-danger" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="form-group">
+                                                <h:commandButton class="btn btn-danger col-sm-2 col-md-offset-6" 
+                                                                 action="#{storeReportBean.cancelUpdate()}"
+                                                                 value="Cancel" />
+                                                <h:commandButton class="btn btn-success col-sm-2" 
+                                                                 action="#{storeReportBean.saveProduct()}"
+                                                                 value="Save" />
+                                            </div>
+                                        </div>
+                                    </div><!--/.modal-content-->
+                                </div><!--/.modal-dialog-->
+                            </div><!--/.modal-->
+                            <script>
+                            $('#myModal').modal('#{storeReportBean.renderUpdateForm ? "show":"hide"}');
+                            </script>
+                        </h:form>
+                    </h:panelGroup>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

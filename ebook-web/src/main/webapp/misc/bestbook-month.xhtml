@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pass="http://xmlns.jcp.org/jsf/passthrough">
+    <h:body>
+        <ui:composition template="../templates/template-general.xhtml">
+            <ui:define name="title">
+                Best Books This Month
+            </ui:define>
+            
+            <ui:define name="scripting">
+                <h:outputScript library="default" name="script/default.js" />
+            </ui:define>
+            
+            <ui:define name="left">
+                <ui:include src="../templates/left-bar.xhtml" />
+            </ui:define>
+            
+            <ui:define name="content">
+                <div>
+                    <p:dataTable rows="3" value="#{bookBean.bestBookThisMonth}" var="book" 
+                                 paginator="true" 
+                                 paginatorPosition="bottom"
+                                 paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15"
+                                 class="curved">
+                        <f:facet name="header">
+                            Best Books This Month
+                        </f:facet>
+                        <p:column>
+                            <div class="row">
+                                <div class="col-sm-8 col-md-6">
+                                    <h:link outcome="/view-book.xhtml">
+                                        <f:param name="bookId" value="#{book.id}" />
+                                        <h:graphicImage class="" height="150"
+                                                        value="#{jsfUtils.getBookFrontImage(book)}" 
+                                                        alt="book" /> 
+                                    </h:link>
+                                </div>
+                                <div class="col-sm-4 col-md-6">
+                                    <h2>#{jsfUtils.capitalize(book.title)}</h2>
+                                    <span class="label label-primary">#{book.price}$</span><br/>
+                                    <span>Author(s):
+                                        <ui:repeat value="#{book.authors.toArray()}" var="author">
+                                            <span class="label label-success"><h:outputText value="#{jsfUtils.capitalize(author.lname)}" /></span>
+                                        </ui:repeat>
+                                    </span>
+                                </div>
+                                <div>
+                                    <h:form class="form form-horizontal">
+                                        <div class="form-group">
+                                            <h:commandButton class="btn btn-primary form-control" 
+                                                             action="#{orderBean.addProductToOrderList(book.id)}" 
+                                                             value="Add To your Cart" 
+                                                             styleClass="#{orderBean.orderedAlready(book.id) ? 'btn btn-primary form-control ordered-highlight':'btn btn-primary form-control'}">
+                                            </h:commandButton>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

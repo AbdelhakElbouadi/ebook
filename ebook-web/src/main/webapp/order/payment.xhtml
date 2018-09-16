@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pass="http://xmlns.jcp.org/jsf/passthrough">
+    <h:body>
+        <ui:composition template="../templates/template-general.xhtml">
+            <ui:define name="title">
+                Payment Information
+            </ui:define>
+            <ui:define name="scripting">
+                <h:outputScript library="default" name="script/default.js" />
+            </ui:define>
+            
+            <ui:define name="content">
+                <div>
+                    <div class="steps">
+                        <h:form>
+                            <p:steps activeIndex="1" styleClass="custom" readonly="true" style="padding: 35px;">
+                                <p:menuitem class="delivery-item" value="Delivery" />
+                                <p:menuitem class="payment-item" value="Payment" />
+                                <p:menuitem class="orderplaced-item" value="Order Placed" />
+                            </p:steps>
+                        </h:form>
+                    </div>
+                    <div>
+                        <p class="well well-sm">Fill Appropriate Information Of Your Card</p>
+                    </div>
+                    
+                    <table style="width: 100%;">
+                        <tr style="width: 100%;">
+                            <!--Left Div -->
+                            <td style="width: 50%; margin: 15px;">
+                                <div class="payment-data">
+                                    <h:form class="form-horizontal" id="paymentForm">
+                                        <h:panelGroup>
+                                            <h:messages errorClass="alert alert-danger" 
+                                                        infoClass="alert alert-success"
+                                                        warnClass="alert alert-warning">
+                                            </h:messages>
+                                        </h:panelGroup>  
+                                            
+                                        <div>
+                                            <div class="row form-group">
+                                                <h:outputLabel class="col-md-3 control-label" for="lname" value="Last Name" />
+                                                <div class=" col-md-9">
+                                                    <h:inputText  id="lname" class="form-control" 
+                                                                  value="#{orderBean.bankCard.lname}" 
+                                                                  requiredMessage="You have to give your last name">
+                                                        <f:validateRequired />
+                                                    </h:inputText>
+                                                    <h:message for="lname" class="alert alert-danger col-md-4"/>
+                                                </div>
+                                            </div>
+                                            <h:outputText value="as written on card" class="col-md-offset-6"
+                                                          style="font-size: 13px; font-family: ArchivoBlack; color: #333333" />
+                                        </div>
+                                            
+                                        <div>
+                                            <div class="row form-group">
+                                                <h:outputLabel class="col-md-3 control-label" for="fname" value="First Name" />
+                                                <div class="col-md-9">
+                                                    <h:inputText  id="fname" class="form-control" 
+                                                                  value="#{orderBean.bankCard.fname}" 
+                                                                  requiredMessage="You have to give your first name">
+                                                        <f:validateRequired />
+                                                    </h:inputText>
+                                                    <h:message for="fname" class="alert alert-danger col-md-4"/>
+                                                </div>
+                                            </div>
+                                            <h:outputText value="as written on card" class="col-md-offset-6"
+                                                          style="font-size: 13px; font-family: ArchivoBlack; color: #333333" />
+                                        </div>
+                                            
+                                        <div>
+                                            <div class="row form-group">
+                                                <h:outputLabel class="control-label col-md-3" for="ccNo" 
+                                                               value="Card Number"/>
+                                                <div class="col-md-9">
+                                                    <h:inputText id="ccNo" class="form-control " 
+                                                                 value="#{orderBean.bankCard.cardNumber}" 
+                                                                 validatorMessage="Only Number Exp: 4445444544454445">
+                                                        <f:validateRegex pattern="[0-9]{13,19}" />
+                                                    </h:inputText>
+                                                    <h:message for="ccNo" class="alert alert-danger col-md-4" />
+                                                </div>
+                                            </div> 
+                                            <h:outputText value="Card Number" class="col-md-offset-6"
+                                                          style="font-size: 13px; font-family: ArchivoBlack; color: #333333" />
+                                        </div>
+                                            
+                                        <div>
+                                            <div class="row form-group">
+                                                <h:outputLabel class="control-label col-md-3" for="cvv" 
+                                                               value="CVV" />
+                                                <div class="col-md-9">
+                                                    <h:inputText id="cvv" class="form-control " 
+                                                                 value="#{orderBean.bankCard.cardVerificationValue}" 
+                                                                 validatorMessage="Only Number Exp: 4445">
+                                                        <f:validateRegex pattern="[0-9]{3,4}" />
+                                                    </h:inputText>
+                                                    <h:message for="cvv" class="alert alert-danger col-md-4" />
+                                                </div>
+                                            </div>
+                                            <h:graphicImage library="default" name="images/cvv.png" 
+                                                            width="125" height="75" alt="cvv" class="col-md-offset-3" />
+                                            <h:outputText value="The three last digits on the back of your card" 
+                                                          style="font-size: 13px; font-family: ArchivoBlack; color: #333333" />
+                                        </div>
+                                            
+                                        <div>
+                                            <div class="row form-group">
+                                                <h:outputLabel class="control-label col-md-3" for="expDate" 
+                                                               value="Expiration Date" />    
+                                                <div class="col-md-9">
+                                                    <h:inputText id="expDate" class="form-control "
+                                                                 value="#{orderBean.expDate}" />
+                                                    <!-- But i still need tengri to be at my side lord of the blue -->
+                                                    <h:message for="expDate" class="alert alert-danger col-md-4" />
+                                                </div>
+                                            </div>
+                                            <h:outputText value="Enter the expiry date mentioned on your card" 
+                                                          class="col-md-offset-4"
+                                                          style="font-size: 13px; font-family: ArchivoBlack; color: #333333" />
+                                        </div>
+                                            
+                                        <div class="row">
+                                            <span class="col-md-2" ></span>
+                                            <h:selectBooleanCheckbox value="#{orderBean.storePaymentDetails}" >
+                                            </h:selectBooleanCheckbox>
+                                            <h:outputText value="&nbsp;&nbsp;Securley Store Payment Details For Future Use" 
+                                                          style="font-size: 15px; font-family: ArchivoBlack; color: #333333" />
+                                        </div>      
+                                    </h:form>
+                                </div>
+                            </td>
+                            
+                            <!--Right Div-->
+                            <td style="width: 50%; margin: 15px;vertical-align: top;">
+                                <div class="shopping-cart-details">
+                                    <div>
+                                        <div>
+                                            <h:outputLabel value="Delivery Options : &nbsp;&nbsp;" />
+                                            <h:outputText value="#{orderBean.calculateShipmentCost()}" />
+                                        </div>
+                                        <hr style="color: #E2E2E2; height: 2px;" />
+                                        <div>
+                                            <div>
+                                                <h:outputLabel value="Total : &nbsp;&nbsp;" />
+                                                <h:outputText value="#{orderBean.totalCharge} $"/>
+                                            </div>
+                                            <div>
+                                                <h:form id="confirm-card">
+                                                    <div>
+                                                        <div>
+                                                            <p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;">
+                                                                <f:facet name="default">
+                                                                    <h:outputText value="Verify The Card Information" />
+                                                                </f:facet>
+                                                                    
+                                                                <f:facet name="start">
+                                                                    <p:graphicImage  value="/resources/default/images/ajaxloadingbar.gif" />
+                                                                </f:facet>
+                                                                    
+                                                                <f:facet name="complete">
+                                                                    <p:graphicImage value="/resources/default/images/checked.png" />
+                                                                </f:facet>
+                                                            </p:ajaxStatus>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <p:commandButton id="paymentToken-btn" type="button" class="btn btn-primary"
+                                                                         value="Submit Payment Card Info" 
+                                                                         onclick="tokenRequest()" />
+                                                        <p:remoteCommand action="#{orderBean.processPayment()}" update="paymentForm" 
+                                                                         name="getPaymentToken" />
+                                                    </div>
+                                                </h:form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <div class="row">
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

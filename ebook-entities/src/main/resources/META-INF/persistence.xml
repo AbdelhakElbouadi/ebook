@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="EbookPU" transaction-type="JTA">
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <jta-data-source>java:/jboss/datasources/EbookDS</jta-data-source>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.schema-generation.create-source" value="script"/>
+      <property name="javax.persistence.schema-generation.create-script-source" value="META-INF/sql/create-ebook.sql"/>
+      <property name="javax.persistence.sql-load-script-source" value="META-INF/sql/data-ebook.sql"/>
+      <property name="javax.persistence.schema-generation.drop-source" value="script"/>
+      <property name="javax.persistence.schema-generation.drop-script-source" value="META-INF/sql/drop-ebook.sql"/>
+      <!-- For Search With Lucene -->
+      <property name="hibernate.search.default.directory_provider" value="filesystem"/>
+      <property name="hibernate.search.default.indexBase" value="/home/solaymane/lucene/indexes"/>
+      <property name="hibernate.search.lucene_version" value="LUCENE_47" />
+      <!--Show database command-->
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.connection.pool_size" value="5"/>
+      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+    </properties>
+  </persistence-unit>
+</persistence>

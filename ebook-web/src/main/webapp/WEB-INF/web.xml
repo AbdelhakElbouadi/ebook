@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>client</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+        <param-value>.xhtml</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    
+    <!--SMTP Server Info-->
+    <context-param>
+        <description>SMTP Server Account Email</description>
+        <param-name>smtpAccountEmail</param-name>
+        <param-value>example@gmail.com</param-value>
+    </context-param>
+    <context-param>
+        <description>SMTP Server Account Password</description>
+        <param-name>smtpAccountPassword</param-name>
+        <param-value>xxxxxxxxxxxx</param-value>
+    </context-param>
+    
+    <!--Payment Information-->
+    <context-param>
+        <param-name>twocheckoutMode</param-name>
+        <param-value>sandbox</param-value>
+    </context-param>
+    <context-param>
+        <param-name>twocheckoutPublishableKey</param-name>
+        <param-value>8275213E-B2E7-4800-8F11-F6632CA0349E</param-value>
+    </context-param>
+    <context-param>
+        <param-name>twocheckoutPrivateKey</param-name>
+        <param-value>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</param-value>
+    </context-param>
+    <context-param>
+        <param-name>twocheckoutSellerId</param-name>
+        <param-value>XXXXXXXXX</param-value>
+    </context-param>
+
+    
+    <servlet>
+        <servlet-name>FacesServlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FacesServlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+    
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>ebook</realm-name>
+        <form-login-config>
+            <form-login-page>/login.xhtml</form-login-page>
+            <form-error-page>/login.xhtml</form-error-page>
+        </form-login-config>
+    </login-config>
+    
+    <security-constraint>
+        <display-name>BookCRUD</display-name>
+        <web-resource-collection>
+            <web-resource-name>AdminOperation</web-resource-name>
+            <url-pattern>/admin/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+            <http-method>PUT</http-method>
+            <http-method>DELETE</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>Admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+    
+    <security-role>
+        <role-name>Admin</role-name>
+    </security-role>
+    <security-role>
+        <role-name>Customer</role-name>
+    </security-role>
+    <security-role>
+        <role-name>Author</role-name>
+    </security-role>
+    
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
+    
+<!--    <error-page>
+        <error-code>500</error-code>
+        <location>/error/server-error.xhtml</location>
+    </error-page>-->
+    
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/not-found.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/error/not-available.xhtml</location>
+    </error-page>
+    
+    <mime-mapping>
+        <extension>eot</extension>
+        <mime-type>application/vnd.ms-fontobject</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>otf</extension>
+        <mime-type>font/opentype</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>svg</extension>
+        <mime-type>image/svg+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ttf</extension>
+        <mime-type>application/x-font-ttf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>woff</extension>
+        <mime-type>application/x-font-woff</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>woff2</extension>
+        <mime-type>application/x-font-woff2</mime-type>
+    </mime-mapping>
+</web-app>

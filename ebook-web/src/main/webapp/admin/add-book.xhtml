@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+    </h:head>
+    <h:body>
+        <ui:composition template="../templates/template-general.xhtml">
+            <ui:define name="title">
+                Add New Book
+            </ui:define>
+            <ui:define name="content">
+                <h:form class="form-horizontal" id="add-book-form">
+                    <h:panelGroup layout="block">
+                        <h:messages errorClass="alert alert-danger" 
+                                    infoClass="alert alert-success"
+                                    warnClass="alert alert-warning">
+                        </h:messages>
+                    </h:panelGroup>
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-sm-2" for="bookTitle">
+                            Book Title
+                        </h:outputLabel>
+                        <div class="col-sm-8">
+                            <h:inputText label="Title" id="bookTitle" class="form-control" 
+                                         value="#{bookBean.book.title}" 
+                                         requiredMessage="Book title is required">
+                                <f:validateRequired />
+                            </h:inputText> 
+                            <h:message for="bookTitle" showDetail="true" showSummary="false" styleClass="alert alert-danger" />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-sm-2" for="bookIsbn">
+                            Book ISBN
+                        </h:outputLabel>
+                        <div class="col-sm-8">
+                            <h:inputText label="Isbn" id="bookIsbn" class="form-control" 
+                                         value="#{bookBean.book.isbn}" 
+                                         validatorMessage="Please provide valid ISBN - ex.: ISBN-13: XXX-XXXXXXXXXX or ISBN-10: XXXXXXXXXX">
+                                <f:validateRegex pattern="(\d{3})?-\d{10}" />
+                            </h:inputText> 
+                            <h:message for="bookIsbn" showDetail="true" showSummary="false" styleClass="alert alert-danger" />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-sm-2" for="bookPrice">
+                            Book Price
+                        </h:outputLabel>
+                        <div class="col-sm-8">
+                            <h:inputText label="Price" id="bookPrice" class="form-control" 
+                                         value="#{bookBean.book.price}" 
+                                         validatorMessage="Please provide valid price - ex.: 452.38">
+                                <f:validateDoubleRange minimum="0" maximum="10000" />
+                            </h:inputText> 
+                            <h:message for="bookPrice" showDetail="true" showSummary="false" styleClass="alert alert-danger" />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        
+                        <h:outputLabel class="control-label col-sm-2" for="bookAuthors">
+                            Book Author
+                        </h:outputLabel>
+                     
+                        <c:forEach items="#{bookBean.book.authors}" var="author" varStatus="authorStatus">
+                            <div class="col-sm-8 #{!authorStatus.first ? 'col-md-offset-2':''}">
+                                <h:inputText  label="Author" id="a#{authorStatus.index}" class="form-control" 
+                                              value="#{bookBean.book.authors[authorStatus.index]}" 
+                                              requiredMessage="Please provide at least one author">
+                                    <f:validateRequired />
+                                    <h:message for="a#{authorStatus.index}" showDetail="true" showSummary="false" styleClass="alert alert-danger" />
+                                </h:inputText> 
+                            </div>
+                        </c:forEach>
+                        
+                        <div class="col-sm-2">
+                            <h:commandLink class="btn btn-primary" action="#{bookBean.addAuthor()}" value="Add Author" rendered="true"/>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h:outputLabel class="control-label col-sm-2" for="bookPublisher">
+                            Book Publisher
+                        </h:outputLabel>
+                        <div class="col-sm-8">
+                            <h:selectOneMenu id="bookPublisher" label="Publisher" value="#{bookBean.book.publisher}" class="form-control" >
+                                <f:selectItem itemLabel="-- Please select a publisher --" itemValue="#{null}" 
+                                              noSelectionOption="true"/>
+                                <f:selectItems class="dropdown-menu" value="#{bookBean.publisherService.getAllPublisher()}"
+                                               var="p" itemLabel="#{p.name}" itemValue="#{p}" >
+                                </f:selectItems>
+                                <f:converter binding="#{publisherConverter}"/>
+                            </h:selectOneMenu>
+                            
+                            <h:message for="bookPublisher" showDetail="true" showSummary="false" styleClass="alert alert-danger" />
+                        </div>
+                        <div class="col-sm-2">
+                            <h:commandLink class="btn btn-default" value="Add Publisher" 
+                                           action="#{bookBean.showPublisherForm}"
+                                           immediate="true" />
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <h:commandButton class="btn btn-primary col-sm-2 col-md-offset-6" action="#{bookBean.create()}" 
+                                         value="Save" />
+                    </div>
+                    
+                    
+                    <!--Add new publisher <form action="action"></form>-->
+                    <h:panelGroup id="add-publisher-form" class="form-horizontal" rendered="#{bookBean.renderPublisherForm}">
+                        <div id="myModal" class="modal fade" tabindex="-1" role="dialog" data-show="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div  class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                                        <h4 class="modal-title">Publisher Form</h4>
+                                    </div>
+                                    <div  class="modal-body">
+                                        <div class="form-group">
+                                            <h:outputLabel class="control-label col-sm-2" for="publisherName">
+                                                Publisher Name
+                                            </h:outputLabel>
+                                            <div class="col-sm-8">
+                                                <h:inputText immediate="true" label="Name" id="publisherName" class="form-control" 
+                                                             valueChangeListener="#{bookBean.publisherNameChanged}"
+                                                             value="#{bookBean.publisher.name}" 
+                                                             requiredMessage="Publisher name is required">
+                                                    <f:validateRequired />
+                                                </h:inputText> 
+                                                <h:message for="publisherName" showDetail="true" showSummary="false" styleClass="alert alert-danger" />
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <h:outputLabel class="control-label col-sm-2" for="publisherUrl">
+                                                Publisher Url
+                                            </h:outputLabel>
+                                            <div class="col-sm-8">
+                                                <h:inputText immediate="true" label="Url" id="publisherUrl" class="form-control" 
+                                                             valueChangeListener="#{bookBean.publisherUrlChanged}"
+                                                             value="#{bookBean.publisher.publisherUrl}" 
+                                                             validatorMessage="Please provide valid URL">
+                                                    <f:validator validatorId="PubliserUrlValidator" />
+                                                </h:inputText> 
+                                                <h:message for="publisherUrl" showDetail="true" showSummary="false" styleClass="alert alert-danger" />
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="form-group">
+                                            <h:commandButton immediate="true" class="btn btn-danger col-sm-2 col-md-offset-6" 
+                                                             action="#{bookBean.cancelPublisher()}"
+                                                             value="Cancel" />
+                                            <h:commandButton immediate="true" class="btn btn-success col-sm-2" 
+                                                             action="#{bookBean.addPublisher()}"
+                                                             value="Save" />
+                                        </div>
+                                    </div>
+                                </div><!--/.modal-content-->
+                            </div><!--/.modal-dialog-->
+                        </div><!--/.modal-->
+                        <script>
+                            $('#myModal').modal('#{bookBean.renderPublisherForm ? "show":"hide"}');
+                        </script>
+                    </h:panelGroup>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

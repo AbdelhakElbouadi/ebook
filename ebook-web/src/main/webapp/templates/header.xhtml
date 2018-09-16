@@ -1,0 +1,56 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle"
+                        data-toggle="collapse" data-target="#custom-navbar">
+                    <span class="icon-bar" />
+                    <span class="icon-bar" />  
+                    <span class="icon-bar" />
+                </button>
+                <h:outputLink class="navbar-brand" value="LogoNoYet" />
+            </div>
+            <div class="collapse navbar-collapse" id="custom-navbar">
+                <ul class="nav navbar-nav">
+                    <li ><h:link value="Home" outcome="/index"></h:link>
+                    </li>
+                </ul>   
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <h:link outcome="/order/shopping-cart.xhtml">
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i> Shopping Cart
+                        </h:link>
+                    </li>
+                    <c:if test="#{not loginBean.userLoggedIn}">
+                        <li>
+                            <h:link outcome="/register.xhtml">
+                                <i class="fa fa-user fa" aria-hidden="true"></i> Register In
+                            </h:link>
+                        </li> 
+                        <li>
+                            <h:link outcome="/login.xhtml">
+                                <i class="fa fa-sign-in fa" aria-hidden="true"></i> LogIn
+                            </h:link>
+                        </li> 
+                    </c:if>
+                    <c:if test="#{loginBean.userLoggedIn}">
+                        <li>
+                            <h:form id="logout-form">
+                                <h:commandLink class="logout-btn btn btn-default btn-circle" action="#{loginBean.logout()}">
+                                    <i class="fa fa-sign-out fa" aria-hidden="true"></i> Log Out
+                                </h:commandLink>  
+                            </h:form>
+                        </li>
+                    </c:if>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</ui:composition>

@@ -1,0 +1,26 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+    ]>
+    <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                    xmlns:h="http://xmlns.jcp.org/jsf/html">
+        <div class="left-bar-links">
+            <div id="popularbooks">
+                <h3 style="color: #666666"><h:outputText value="Popular Books" /></h3>
+                <br/>
+                <br/>
+                <ul>
+                    <!--Popular Books-->
+                    <li>
+                        <h:link class="link-hover-white" outcome="/misc/bestbook-week" value="Best Books Of The Week"  />
+                    </li>
+                    <li>
+                        <h:link class="link-hover-white" outcome="/misc/bestbook-month" value="Best Books Of The Month"  />
+                    </li>
+                    <li>
+                        <h:link class="link-hover-white" outcome="/misc/bestbook-year" value="Best Books Of The Year(So Far)"  />
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </ui:composition>

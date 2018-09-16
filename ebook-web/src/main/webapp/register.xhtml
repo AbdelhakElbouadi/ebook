@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+    </h:head>
+    <h:body>
+        <ui:composition template="templates/template-general.xhtml">
+            <ui:define name="title">
+                Register New Account
+            </ui:define>
+            <ui:define name="content">
+                <div class="" id="register-form">
+                    <h:form class="form-horizontal" >
+                        <h:panelGroup layout="block" id="msg">
+                            <h:messages errorClass="alert alert-danger" 
+                                        infoClass="alert alert-success"
+                                        warnClass="alert alert-warning">
+                            </h:messages>
+                        </h:panelGroup>
+                        <div>
+                            <h:graphicImage width="350" height="100" style="margin: 5px auto;" 
+                                            library="default" name="images/estore-logo.png" />
+                            <h3>Create Ebook Account</h3>
+                        </div>
+                        <div class="row">
+                            <h:outputLabel class="cols-sm-2 control-label" for="lname" value="Last Name" />
+                            <div class="cols-sm-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                                    <h:inputText  id="lname" class="form-control" 
+                                                  value="#{registerBean.user.lname}" 
+                                                  requiredMessage="You have to give your last name">
+                                        <f:validateRequired />
+                                    </h:inputText>
+                                </div>
+                                <h:message for="lname" class="alert alert-danger"/>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <h:outputLabel class="cols-sm-2 control-label" for="fname" value="First Name" />
+                            <div class="cols-sm-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                                    <h:inputText  id="fname" class="form-control" 
+                                                  value="#{registerBean.user.fname}" 
+                                                  requiredMessage="You have to give your first name">
+                                        <f:validateRequired />
+                                    </h:inputText>
+                                </div>
+                                <h:message for="fname" class="alert alert-danger"/>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <h:outputLabel class="cols-sm-2 control-label" for="email" value="Email" />
+                            <div class="cols-sm-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                                    <h:inputText  id="email" class="form-control" 
+                                                  value="#{registerBean.user.email}" 
+                                                  requiredMessage="Give a valid email Ex:company@server.com">
+                                        <f:validateRegex pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$" />
+                                        <f:ajax event="change" execute="@this" render="@this msg" 
+                                                listener="#{registerBean.verifyDuplicateCustomerEmail()}" />
+                                    </h:inputText>
+                                </div>
+                                <h:message for="email" class="alert alert-danger"/>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <h:outputLabel class="cols-sm-2 control-label" for="pwd" value="Password" />
+                            <div class="cols-sm-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock fa" aria-hidden="true"></i></span>
+                                    <h:inputSecret id="pwd" class="form-control" 
+                                                   value="#{registerBean.user.password}"  required="true">
+                                        <f:validator validatorId="confirmPasswordValidator" />
+                                        <f:attribute name="confirm" value="#{confirmPassword.submittedValue}" />
+                                    </h:inputSecret>
+                                </div>
+                                <h:message id="m_pwd" for="pwd" class="alert alert-danger"/>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <h:outputLabel class="cols-sm-2 control-label" for="cpwd" value="Confirm Password" />
+                            <div class="cols-sm-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock fa" aria-hidden="true"></i></span>
+                                    <h:inputSecret id="cpwd" class="form-control" binding="#{confirmPassword}"
+                                                   required="true">
+                                        <f:ajax event="blur" execute="pwd cpwd" render="m_pwd m_cpwd" />
+                                    </h:inputSecret>
+                                </div>
+                                <h:message id="m_cpwd" for="pwd" class="alert alert-danger"/>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" style="margin: 10px 0px;">
+                            <h:commandButton class="btn btn-primary form-control" 
+                                             action="#{registerBean.registerUser()}" value="Create Ebook Account" />
+                        </div>
+                        <div class="form-group">
+                            <p style="font-size: 16px; font-family: ArchivoBlack">
+                                By Creating An Ebook Account You Agree To 
+                                <h:link value="Conditions Of Use" outcome="/misc/conditions.xhtml" />
+                                And <h:link value="Privacy Notice" outcome="/misc/privacy-notice.xhtml" />
+                            </p>
+                        </div>  
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

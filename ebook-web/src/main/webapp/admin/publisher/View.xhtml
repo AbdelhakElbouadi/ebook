@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+    </h:head>
+    <h:body>
+        <ui:composition template="../templates/admin-template.xhtml">
+            <ui:define name="title">
+                Publisher View
+            </ui:define>
+            <ui:define name="content">
+                <div class="">
+                    <h:form class="form-horizontal">
+                        <p:dataTable rows="10"  value="#{publisherBean.allPublisher}" var="publisher" 
+                                     paginator="true" 
+                                     paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15"
+                                     class="curved">
+                            <f:facet name="header">
+                                List Of All Publishers
+                            </f:facet>
+                            <p:column>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h:outputText value="#{publisher.name}" />
+                                    </div>
+                                    <div class="col-md-4">                                  
+                                        <h:link target="_blank">
+                                            <h:outputText value="#{publisher.publisherUrl}" />
+                                        </h:link>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h:commandButton class="btn btn-primary" value="Edit" 
+                                                         action="#{publisherBean.renderEditPublisherForm(publisher.id)}">
+                                        </h:commandButton>
+                                    </div>
+                                </div>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </div>
+                <div id="editModal">
+                    <h:panelGroup rendered="#{publisherBean.renderEditPublisherForm}">
+                        <h:form class="form-horizontal">
+                            <div id="pubEditModal" class="modal fade" tabindex="-1" role="dialog" data-show="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div  class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                                            <h4 class="modal-title">Publisher Form</h4>
+                                        </div>
+                                        <div  class="modal-body">
+                                            <div>
+                                                <h:panelGroup layout="block">
+                                                    <h:messages errorClass="alert alert-danger" 
+                                                                infoClass="alert alert-success"
+                                                                warnClass="alert alert-warning">
+                                                    </h:messages>
+                                                </h:panelGroup>
+                                            </div>
+                                            <div class="form-group">
+                                                <h:outputLabel class="control-label col-sm-2" for="publisherName">
+                                                    Publisher Name
+                                                </h:outputLabel>
+                                                <div class="col-sm-8">
+                                                    <h:inputText label="Name" id="publisherName" class="form-control" 
+                                                                 value="#{publisherBean.publisher.name}" 
+                                                                 requiredMessage="Publisher name is required">
+                                                        <f:validateRequired />
+                                                    </h:inputText> 
+                                                    <h:message for="publisherName" showDetail="true" showSummary="false" styleClass="alert alert-danger" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <h:outputLabel class="control-label col-sm-2" for="publisherUrl">
+                                                    Publisher Url
+                                                </h:outputLabel>
+                                                <div class="col-sm-8">
+                                                    <h:inputText label="Url" id="publisherUrl" class="form-control" 
+                                                                 value="#{publisherBean.publisher.publisherUrl}" 
+                                                                 validatorMessage="Please provide valid URL">
+                                                        <f:validator validatorId="PublisherUrlValidator" />
+                                                    </h:inputText> 
+                                                    <h:message for="publisherUrl" showDetail="true" showSummary="false" styleClass="alert alert-danger" />
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="form-group">
+                                                <h:commandButton class="btn btn-default col-sm-2 col-md-offset-6" 
+                                                                 action="#{publisherBean.cancelPublisher()}"
+                                                                 value="Cancel" />
+                                                <h:commandButton class="btn btn-primary col-sm-2" 
+                                                                 action="#{publisherBean.editPublisher}"
+                                                                 value="Save" />
+                                            </div>
+                                        </div>
+                                    </div><!--/.modal-content-->
+                                </div><!--/.modal-dialog-->
+                            </div><!--/.modal-->
+                            <script>
+                                $('#pubEditModal').modal('#{publisherBean.renderEditPublisherForm ? "show":"hide"}');
+                            </script>
+                        </h:form>
+                    </h:panelGroup>
+                </div>
+                
+                <div id="deleteModal">
+                    <h:panelGroup rendered="#{publisherBean.renderDeletePublisherForm}">
+                        <h:form class="form-horizontal">
+                            <div id="pubDeleteModal" class="modal fade" tabindex="-1" role="dialog" data-show="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div  class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                                            <h4 class="modal-title">Publisher Form</h4>
+                                        </div>
+                                        <div  class="modal-body">
+                                            <div class="form-group">
+                                                <h:outputText class="alert alert-danger" 
+                                                              value="Publisher With Name #{publisherBean.publisher.name} Gonna Be Deleted.Are You Sure?"/>
+                                            </div>  
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="form-group">
+                                                <h:commandButton class="btn btn-default col-sm-2 col-md-offset-6" 
+                                                                 action="#{publisherBean.cancelPublisher()}"
+                                                                 value="Cancel" />
+                                                <h:commandButton class="btn btn-danger col-sm-2" 
+                                                                 action="#{publisherBean.deletePublisher()}"
+                                                                 value="Delete" />
+                                            </div>
+                                        </div>
+                                    </div><!--/.modal-content-->
+                                </div><!--/.modal-dialog-->
+                            </div><!--/.modal-->
+                            <script>
+                                $('#pubDeleteModal').modal('#{publisherBean.renderDeletePublisherForm ? "show":"hide"}');
+                            </script>
+                        </h:form>
+                    </h:panelGroup>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

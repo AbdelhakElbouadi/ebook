@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+    </h:head>
+    <h:body>
+        <ui:composition template="templates/template-general.xhtml">
+            <ui:define name="title">
+                Welcome to Login Page
+            </ui:define>
+            <ui:define name="content">
+                <div id="login-form-general" >
+                    <h:form class="form-horizontal">
+                        <div class="login-data-input">
+                            <h:panelGroup layout="block">
+                                <h:messages errorClass="alert alert-danger" 
+                                            infoClass="alert alert-success"
+                                            warnClass="alert alert-warning">
+                                </h:messages>
+                            </h:panelGroup>
+                            <div>
+                                <h:graphicImage width="350" height="100" style="margin: 5px auto;" 
+                                                library="default" name="images/estore-logo.png" />
+                                <h3>Sign In</h3>
+                            </div>
+                            <hr class="colorgraph" />
+                            <div class="form-group">
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                                        <h:inputText  id="username" class="form-control" 
+                                                      value="#{loginBean.email}" >
+                                        </h:inputText>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock fa" aria-hidden="true"></i></span>
+                                        <h:inputSecret id="pwd" class="form-control" 
+                                                       value="#{loginBean.password}">
+                                        </h:inputSecret>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <h:commandButton action="#{loginBean.login()}" 
+                                                 value="Log In" 
+                                                 class="btn btn-primary form-control" />
+                            </div>  
+                            <div class="form-group">
+                                <div class="col-md-6" style="font-size: 16px;">
+                                    <h:link value="Forget Password?" outcome="/recover-pass.xhtml">
+                                    </h:link>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin: 10px auto;width: 200px;">
+                            <h4><h:outputText value="Or New To E-Book ?" /></h4>
+                        </div>
+                        <div>
+                            <h:link class="btn btn-default" 
+                                    style="display: inline-block; width: 430px; background-color: #E1E4EA;" 
+                                    value="Create Your Ebook Account" 
+                                    outcome="/register.xhtml" >
+                            </h:link>
+                        </div>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

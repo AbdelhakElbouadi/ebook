@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+    </h:head>
+    <h:body>
+        <ui:composition template="../templates/admin-template.xhtml">
+            <ui:define name="title">
+                Author View
+            </ui:define>
+            <ui:define name="content">
+                <div class="">
+                    <h:form class="form-horizontal">
+                        <p:dataTable rows="10"  value="#{authorBean.allAuthor}" var="author" 
+                                     paginator="true" 
+                                     paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15"
+                                     class="curved">
+                            <p:column>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <h:outputText value="#{author.lname} #{author.fname}" />
+                                    </div>
+                                    <div class="col-md-2">                                  
+                                        <h:outputText value="#{author.email}" />
+                                    </div>
+                                    <div class="col-md-2">                                  
+                                        <h:outputText value="#{author.phoneWork}" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <span>Categories: 
+                                        <ui:repeat value="#{authorBean.getAuthorCategory(author.id)}" var="cat">
+                                            <span>#{cat.name}</span><br/>
+                                        </ui:repeat>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h:commandButton class="btn btn-primary" value="Edit" 
+                                                         action="#{authorBean.renderEditAuthorForm(author.id)}">
+                                        </h:commandButton>
+                                        <h:commandButton class="btn btn-danger" value="Delete" 
+                                                         action="#{authorBean.renderDeleteAuthorForm(author.id)}">
+                                        </h:commandButton>
+                                    </div>
+                                </div>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </div>
+                <div id="editModal">
+                    <h:panelGroup rendered="#{authorBean.renderEditAuthorForm}">
+                        <h:form class="form-horizontal">
+                            <div id="authEditModal" class="modal fade" tabindex="-1" role="dialog" data-show="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div  class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                                            <h4 class="modal-title">Publisher Form</h4>
+                                        </div>
+                                        <div  class="modal-body">
+                                            <div class="form-group">
+                                                <h:outputLabel class="control-label col-sm-2" for="autholname">
+                                                    Author Last Name
+                                                </h:outputLabel>
+                                                <div class="col-sm-8">
+                                                    <h:inputText label="Name" id="autholname" class="form-control" 
+                                                                 value="#{authorBean.author.lname}" 
+                                                                 requiredMessage="Publisher name is required">
+                                                        <f:validateRequired />
+                                                    </h:inputText> 
+                                                    <h:message for="autholname" showDetail="true" showSummary="false" styleClass="alert alert-danger" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <h:outputLabel class="control-label col-sm-2" for="authofname">
+                                                    Author First Name
+                                                </h:outputLabel>
+                                                <div class="col-sm-8">
+                                                    <h:inputText label="Name" id="authofname" class="form-control" 
+                                                                 value="#{authorBean.author.fname}" 
+                                                                 requiredMessage="Publisher name is required">
+                                                        <f:validateRequired />
+                                                    </h:inputText> 
+                                                    <h:message for="authofname" showDetail="true" showSummary="false" styleClass="alert alert-danger" />
+                                                </div>
+                                            </div>        
+                                                
+                                            <div class="form-group">
+                                                <h:outputLabel class="cols-sm-2 control-label" for="phonepersonal" value="Personal Phone" />
+                                                <div class="cols-sm-10">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                                                        <h:inputText  id="phonepersonal" class="form-control" 
+                                                                      value="#{authorBean.author.phoneHome}" >
+                                                        </h:inputText>
+                                                    </div>
+                                                    <h:message for="phonepersonal" class="alert alert-danger"/>
+                                                </div>
+                                            </div>
+                        
+                                            <div class="form-group">
+                                                <h:outputLabel class="cols-sm-2 control-label" for="phonework" value="Domicile Phone" />
+                                                <div class="cols-sm-10">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                                                        <h:inputText  id="phonework" class="form-control" 
+                                                                      value="#{authorBean.author.phoneWork}" >
+                                                        </h:inputText>
+                                                    </div>
+                                                    <h:message for="phonework" class="alert alert-danger"/>
+                                                </div>
+                                            </div>
+                        
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="form-group">
+                                                <h:commandButton class="btn btn-default col-sm-2 col-md-offset-6" 
+                                                                 action="#{authorBean.cancelAuthor()}"
+                                                                 value="Cancel" />
+                                                <h:commandButton class="btn btn-primary col-sm-2" 
+                                                                 action="#{authorBean.editAuthor()}"
+                                                                 value="Save" />
+                                            </div>
+                                        </div>
+                                    </div><!--/.modal-content-->
+                                </div><!--/.modal-dialog-->
+                            </div><!--/.modal-->
+                            <script>
+                                $('#authEditModal').modal('#{authorBean.renderEditAuthorForm ? "show":"hide"}');
+                            </script>
+                        </h:form>
+                    </h:panelGroup>
+                </div>
+                
+                <div id="deleteModal">
+                    <h:panelGroup rendered="#{authorBean.renderDeleteAuthorForm}">
+                         <h:form class="form-horizontal">
+                            <div id="authDeleteModal" class="modal fade" tabindex="-1" role="dialog" data-show="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div  class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                                            <h4 class="modal-title">Author Form</h4>
+                                        </div>
+                                        <div  class="modal-body">
+                                            <div class="form-group">
+                                                <h:outputText class="alert alert-danger" 
+                                                              value="Author With Name #{authorBean.author.lname}  #{authorBean.author.fname} Gonna Be Deleted.Are You Sure?" />
+                                            </div>  
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="form-group">
+                                                <h:commandButton class="btn btn-default col-sm-2 col-md-offset-6" 
+                                                                 action="#{authorBean.cancelAuthor()}"
+                                                                 value="Cancel" />
+                                                <h:commandButton class="btn btn-danger col-sm-2" 
+                                                                 action="#{authorBean.deleteAuthor()}"
+                                                                 value="Delete" />
+                                            </div>
+                                        </div>
+                                    </div><!--/.modal-content-->
+                                </div><!--/.modal-dialog-->
+                            </div><!--/.modal-->
+                            <script>
+                                $('#authDeleteModal').modal('#{authorBean.renderDeleteAuthorForm ? "show":"hide"}');
+                            </script>
+                        </h:form>
+                    </h:panelGroup>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

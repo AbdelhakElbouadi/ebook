@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+    </h:head>
+    <h:body>
+        <ui:composition template="templates/admin-template.xhtml">
+            <ui:define name="title">
+                Add New User
+            </ui:define>
+                
+            <ui:define name="content">
+                <h:form class="form-horizontal" id="register-form">
+                    <h:panelGroup id="msg">
+                        <h:messages errorClass="alert alert-danger" 
+                                    infoClass="alert alert-success"
+                                    warnClass="alert alert-warning">
+                        </h:messages>
+                    </h:panelGroup>
+                    <div class="form-group">
+                        <h:outputLabel class="cols-sm-2 control-label" for="lname" value="Last Name" />
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                                <h:inputText  id="lname" class="form-control" 
+                                              value="#{registerBean.manager.lname}" 
+                                              requiredMessage="You have to give your last name">
+                                    <f:validateRequired />
+                                </h:inputText>
+                            </div>
+                            <h:message for="lname" class="alert alert-danger"/>
+                        </div>
+                    </div>
+                        
+                    <div class="form-group">
+                        <h:outputLabel class="cols-sm-2 control-label" for="fname" value="First Name" />
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                                <h:inputText  id="fname" class="form-control" 
+                                              value="#{registerBean.manager.fname}" 
+                                              requiredMessage="You have to give your first name">
+                                    <f:validateRequired />
+                                </h:inputText>
+                            </div>
+                            <h:message for="fname" class="alert alert-danger"/>
+                        </div>
+                    </div>
+                        
+                    <div class="form-group">
+                        <h:outputLabel class="cols-sm-2 control-label" for="email" value="Email" />
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                                <h:inputText  id="email" class="form-control"
+                                              value="#{registerBean.manager.email}" 
+                                              requiredMessage="Give a valid email Ex:company@server.com">
+                                    <f:validateRegex pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$" />
+                                    <f:ajax event="change" execute="@this" render="@this msg" 
+                                            listener="#{registerBean.verifyDuplicateAdminEmail()}" />
+                                </h:inputText>
+                            </div>
+                            <h:message for="email" class="alert alert-danger"/>
+                        </div>
+                    </div>
+                        
+                    <div class="form-group">
+                        <h:outputLabel class="cols-sm-2 control-label" for="pwd" value="Password" />
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock fa" aria-hidden="true"></i></span>
+                                <h:inputSecret id="pwd" class="form-control" 
+                                               value="#{registerBean.manager.password}"  required="true">
+                                    <f:validator validatorId="confirmPasswordValidator" />
+                                    <f:attribute name="confirm" value="#{confirmPassword.submittedValue}" />
+                                </h:inputSecret>
+                            </div>
+                            <h:message id="m_pwd" for="pwd" class="alert alert-danger"/>
+                        </div>
+                    </div>
+                        
+                    <div class="form-group">
+                        <h:outputLabel class="cols-sm-2 control-label" for="cpwd" value="Confirm Password" />
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock fa" aria-hidden="true"></i></span>
+                                <h:inputSecret id="cpwd" class="form-control" binding="#{confirmPassword}"
+                                               required="true">
+                                    <f:ajax event="blur" execute="pwd cpwd" render="m_pwd m_cpwd" />
+                                </h:inputSecret>
+                            </div>
+                            <h:message id="m_cpwd" for="pwd" class="alert alert-danger"/>
+                        </div>
+                    </div>
+                        
+                    <div class="form-group">
+                        <h:commandButton class="btn btn-primary btn-lg btn-block btn-login" 
+                                         action="#{registerBean.registerUserAsAdmin()}" 
+                                         value="Register Now" />
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

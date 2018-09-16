@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+    </h:head>
+    <h:body>
+        <ui:composition template="templates/template-general.xhtml">
+            <ui:define name="title">
+                <h:outputText value="#{viewBookBean.capitalize(viewBookBean.book.title)}" />
+            </ui:define>
+                
+            <ui:define name="content">
+                <f:metadata >
+                    <f:viewParam name="bookId" value="#{viewBookBean.bookToViewId}"/>    
+                    <f:viewAction action="#{viewBookBean.viewBook()}"/>
+                </f:metadata>
+                <div class="shopping-cart-section">
+                    <h:panelGroup class="shopping-cart-section" rendered="#{orderBean.renderShoppingCartSection}" 
+                                  layout="block">
+                        <div>
+                            <h:form class="form form-inline">
+                                <h:selectOneMenu id="ordered-items" class="form-control col-md-4">
+                                    <f:selectItems value="#{orderBean.shoppingCartItems}" />
+                                </h:selectOneMenu>
+                                    
+                                <h:commandButton value="Cart" action="shopping-cart.xhtml" 
+                                                 class="btn btn-default col-md-2 col-sm-offset-2">
+                                </h:commandButton>
+                                <h:commandButton value="Proceed to Checkout" action="card-verification.xhtml" 
+                                                 class="btn btn-default col-md-2 col-sm-offset-2">
+                                </h:commandButton>
+                            </h:form>
+                        </div>
+                    </h:panelGroup>
+                </div>
+                    
+                <div class="book-details row">
+                    <div class="col-md-4 flex-container">
+                        <div style="width: 120px;">
+                            <h:graphicImage height="175" width="115" value="#{jsfUtils.getBookFrontImage(viewBookBean.book)}">
+                            </h:graphicImage><br/>
+                            <span class="label label-info">ISBN-13: #{viewBookBean.book.isbn}</span>
+                        </div>
+                        <div>
+                            <h3>#{viewBookBean.capitalize(viewBookBean.book.title)}</h3>
+                            <span>By Author(s):
+                                <ui:repeat value="#{viewBookBean.book.authors.toArray()}" var="author">
+                                    <span class="label label-success">#{viewBookBean.capitalize(author.lname)} #{viewBookBean.capitalize(author.fname)}, </span>
+                                </ui:repeat>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab"  href="#paper-version">Paper Version</a></li>
+                            <li><a data-toggle="tab" href="#digital-version">Digital Version</a></li>
+                            <li><a data-toggle="tab" href="#other-sellers">Other Sellers</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active" id="paper-version">
+                                <h3>The paper version is better</h3>
+                                <p>In Stock Ship from here to your country</p>
+                                <h:form id="add-paper-book-form" class="form-horizontal">
+                                    <p:spinner id="item-amount" value="#{orderBean.quantity}" min="1" max="10" style="display: inline-block; width: 225px;">
+                                        <f:validateRequired />
+                                    </p:spinner>
+                                    <br/>
+                                    <h:commandButton class="btn btn-primary form-control" style="display: inline-block; width: 225px;"
+                                                     action="#{orderBean.addProductToOrderList(viewBookBean.bookToViewId)}"
+                                                     value="Add To your Cart" 
+                                                     styleClass="#{orderBean.orderedAlready(viewBookBean.bookToViewId) ? 'btn btn-primary form-control ordered-highlight':'btn btn-primary form-control'}">
+                                        <f:param name="fromPage" value="#{view.viewId}"/>
+                                    </h:commandButton>
+                                </h:form>
+                            </div>
+                            <div class="tab-pane fade" id="digital-version">
+                                <h3>The digital version is the more secure</h3>
+                                <h:form class="form-horizontal add-digital-book-form">
+                                    <p:spinner id="item-amount" value="#{orderBean.quantity}" min="1" max="10" style="display: inline-block; width: 225px;">
+                                        <f:validateRequired />
+                                    </p:spinner>
+                                    <br/>
+                                    <h:commandButton class="btn btn-primary form-control" style="display: inline-block; width: 225px;"
+                                                     action="#{orderBean.addProductToOrderList(viewBookBean.bookToViewId)}" 
+                                                     value="Add To your Cart" 
+                                                     styleClass="#{orderBean.orderedAlready(viewBookBean.bookToViewId) ? 'btn btn-primary form-control ordered-highlight':'btn btn-primary form-control'}">
+                                        <f:param name="fromPage" value="#{view.viewId}"/>
+                                    </h:commandButton>
+                                </h:form>
+                            </div>
+                            <div class="tab-pane fade" id="other-sellers">
+                                <h3>You are with other not us</h3>
+                                <h:form id="other-sellers-form" class="form-horizontal">
+                                    <h:commandButton class="btn btn-primary" style="display: inline-block; width: 225px;"
+                                                     action="#{orderBean}"
+                                                     value="Add To you Cart" />
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-forum col-md-12">
+                    <div class="rating-review">
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <h:outputText class="" value="Customers Review"/>
+                            <p:rating value="#{viewBookBean.bookRating}" readonly="true" />
+                        </h:panelGrid>  
+                    </div>
+                    <div class="customers-review">
+                        <ui:repeat value="#{viewBookBean.getAllCommentOnBook(viewBookBean.bookToViewId)}" 
+                                   var="comment" >
+                            <!--Get all comments on this product from customers.-->
+                            <c:if test="${not empty comment}" >
+                                <div class="media">
+                                    <div class="media-left">
+                                        <h:graphicImage value="/resources/default/images/atomix_user.png" 
+                                                        alt="Customer Image" height="75"
+                                                        width="60" 
+                                                        class="media-object"/>
+                                    </div>
+                                    <div class="media-body">   
+                                        <div class="media-heading">
+                                            <h4>
+                                                #{viewBookBean.capitalize(comment.reviewer.lname)} 
+                                                #{viewBookBean.capitalize(comment.reviewer.fname)}
+                                            </h4>
+                                            <h4>
+                                                <p:rating 
+                                                    value="#{viewBookBean
+                                                             .getCustomerRateOnProduct(comment.reviewer.id,
+                                                             viewBookBean.bookToViewId)}"  readonly="true" />
+                                                <small>Posted on #{comment.dateCreated}</small>
+                                            </h4>
+                                        </div>
+                                        <div class="well well-sm">
+                                            #{comment.content}
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:if>
+                        </ui:repeat>
+                        <div class="customer-review">
+                            <c:if test="#{loginBean.userLoggedIn}">
+                                <h:form class="form-horizontal">
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <h:outputText value="Your Rating : " />
+                                        <c:choose>
+                                            <c:when test="#{viewBookBean.
+                                                            getCustomerRateOnProduct(loginBean.actualCustomer.id,
+                                                            viewBookBean.bookToViewId) ge 0}">
+                                                <p:rating value="#{viewBookBean.
+                                                                   getCustomerRateOnProduct(loginBean.actualCustomer.id,
+                                                                   viewBookBean.bookToViewId)}" readonly="true" />
+                                            </c:when>
+                                            <c:when test="#{viewBookBean.
+                                                            getCustomerRateOnProduct(loginBean.actualCustomer.id,
+                                                            viewBookBean.bookToViewId) lt 0}">
+                                                <p:rating value="#{viewBookBean.rate.rate}"  />
+                                            </c:when>
+                                        </c:choose>
+                                        <p:inputTextarea rows="5" cols="75" counter="display" 
+                                                         maxlength="255" counterTemplate="{0} characters remaining"  
+                                                         value="#{viewBookBean.comment.content}" />
+                                        <h:outputText id="display" />
+                                    </h:panelGrid>
+                                    <h:commandButton class="btn btn-default" value="write custom review" 
+                                                     action="#{viewBookBean.addCustomerReview(loginBean.actualCustomer)}" />
+                                </h:form>
+                            </c:if>
+                        </div>
+                    </div>
+                </div>
+                    
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

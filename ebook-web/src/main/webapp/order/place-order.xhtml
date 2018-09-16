@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pass="http://xmlns.jcp.org/jsf/passthrough">
+    <h:body>
+        <ui:composition template="../templates/template-general.xhtml">
+            <ui:define name="title">
+                Place Your Order
+            </ui:define>
+            <ui:define name="scripting">
+                <h:outputScript library="default" name="script/default.js" />
+                <script>
+                    $(document).ready(function(){
+                        alert("Congratulations You Are Here Right Now!!!");
+                    });
+                </script>
+            </ui:define>
+            
+            <ui:define name="content">
+                <div>
+                    <p class="alert alert-success"> Hello Mad Man Your made to the world of Alice</p>
+                    <h:panelGroup>
+                        <h:messages errorClass="alert alert-danger" 
+                                    infoClass="alert alert-success"
+                                    warnClass="alert alert-warning">
+                        </h:messages>
+                    </h:panelGroup>
+                            
+                </div>
+                <div>
+                    <h:form class="form form-horizontal" id="placeOrderForm">
+                        <h:panelGroup>
+                            <h:messages errorClass="alert alert-danger" 
+                                        infoClass="alert alert-success"
+                                        warnClass="alert alert-warning">
+                            </h:messages>
+                        </h:panelGroup>
+                            
+                        <div class="form-group row">
+                            <h:commandButton class="btn btn-primary col-md-5 col-md-offset-7" 
+                                             action="#{orderBean.chargePayment()}" 
+                                             value="Place Order(Confirm Request)" />
+                        </div>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

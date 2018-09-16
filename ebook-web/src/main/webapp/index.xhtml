@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="templates/template-general.xhtml">
+            <ui:define name="title"><h:outputText value="Welcome!!!" /></ui:define>
+            
+            <ui:define name="left">
+                <ui:include src="templates/left-bar.xhtml" />
+            </ui:define>
+            
+            <ui:define name="content">
+                <div class="search-area">
+                    <h:form>
+                        <p:defaultCommand target="searchcommand" />
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <h:commandLink id="searchcommand" action="#{searchbook.search}" 
+                                               class="btn btn-primary curved searchbar" >
+                                    <span><i class="fa fa-search"></i></span>
+                                </h:commandLink>
+                            </span>    
+                            <h:inputText value="#{searchbook.searchRequest}" 
+                                         class="searchbar curved form-control" />
+                        </div> 
+                    </h:form>    
+                </div>
+                
+                <div class="searched-result">
+                    <h:panelGroup rendered="#{searchbook.someSearched}">
+                        <h:form>
+                            <h:panelGroup layout="block" >
+                                <h:messages fatalClass="alert alert-danger" 
+                                            errorClass="alert alert-danger" 
+                                            infoClass="alert alert-success" 
+                                            warnClass="alert alert-warning" layout="list">
+                                </h:messages>
+                            </h:panelGroup>    
+                            <!--Split the column on tree so you can have the books all over here perhaps a table-->
+                            <p:dataTable rows="3" value="#{searchbook.searchedBooks}" var="book" 
+                                         paginator="true" 
+                                         paginatorPosition="bottom"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="3,6,9"
+                                         class="curved">
+                                <p:column>
+                                    <div class="row">
+                                        <div class="col-sm-8 col-md-6">
+                                            <h:link outcome="view-book.xhtml">
+                                                <f:param name="bookId" value="#{book.id}" />
+                                                <h:graphicImage class="" height="175" width="115"
+                                                                value="#{jsfUtils.getBookFrontImage(book)}" 
+                                                                alt="book" /> 
+                                            </h:link>
+                                        </div>
+                                        <div class="col-sm-4 col-md-6">
+                                            <h2>#{searchbook.capitalize(book.title)}</h2>
+                                            <span class="label label-primary">#{book.price}$</span><br/>
+                                            <span>Author(s):
+                                                <ui:repeat value="#{book.authors.toArray()}" var="author">
+                                                    <span class="label label-success"><h:outputText value="#{searchbook.capitalize(author.lname)}" /></span>
+                                                </ui:repeat>
+                                            </span>
+                                        </div>
+                                        <div>                             
+                                            <div class="form-group">
+                                                <h:commandButton class="btn btn-primary form-control" 
+                                                                 action="#{orderBean.addProductToOrderList(book.id)}" 
+                                                                 value="Add To your Cart" 
+                                                                 styleClass="#{orderBean.orderedAlready(book.id) ? 'btn btn-primary form-control ordered-highlight':'btn btn-primary form-control'}">
+                                                </h:commandButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </h:panelGroup>
+                </div>
+                <div class="misc-result">
+                    <p:carousel value="#{searchbook.newBooks}" var="book" 
+                                circular="true" numVisible="3" class="curved" 
+                                itemStyleClass="curved" headerText="New Books In Stock">
+                        <div class="book-data">
+                            <div>
+                                <h:link outcome="view-book.xhtml">
+                                    <f:param name="bookId" value="#{book.id}" />
+                                    <h:graphicImage class="" height="175" width="115"
+                                                    value="#{jsfUtils.getBookFrontImage(book)}" 
+                                                    alt="book" /> 
+                                    <h4>#{searchbook.capitalize(book.title)}</h4>
+                                    <span class="label label-primary">#{book.price}$</span><br/>
+                                    <span>Author(s):
+                                        <ui:repeat value="#{book.authors.toArray()}" var="author">
+                                            <span class="label label-success">
+                                                <h:outputText value="#{searchbook.capitalize(author.lname)} #{searchbook.capitalize(author.fname)}" /></span>
+                                        </ui:repeat>
+                                    </span>
+                                </h:link>
+                                <h:form>
+                                    <h:commandButton class="btn btn-primary form-control" 
+                                                     action="#{orderBean.addProductToOrderList(book.id)}" 
+                                                     value="Add To your Cart" 
+                                                     styleClass="#{orderBean.orderedAlready(book.id) ? 'btn btn-primary form-control ordered-highlight':'btn btn-primary form-control'}">
+                                    </h:commandButton>
+                                </h:form>
+                            </div>
+                        </div>
+                    </p:carousel>
+                </div>
+                <div class="misc-result">
+                    <p:carousel value="#{searchbook.buyedBooks}" var="book" 
+                                circular="true" numVisible="3" class="curved" 
+                                itemStyleClass="curved" headerText="Most Buyed By Our Customer">
+                        <div class="book-data">
+                            <h:link outcome="view-book.xhtml">
+                                <f:param name="bookId" value="#{book.id}" />
+                                <h:graphicImage class="" height="175" width="115"
+                                                value="#{jsfUtils.getBookFrontImage(book)}" 
+                                                alt="book" /> 
+                                <h4>#{searchbook.capitalize(book.title)}</h4>
+                                <span class="label label-primary">#{book.price}$</span><br/>
+                                <span>Author(s):
+                                    <ui:repeat value="#{book.authors.toArray()}" var="author">
+                                        <span class="label label-success"><h:outputText value="#{searchbook.capitalize(author.lname)}" /></span>
+                                    </ui:repeat>
+                                </span>
+                            </h:link>
+                            <h:form>
+                                <h:commandButton class="btn btn-primary form-control" 
+                                                 action="#{orderBean.addProductToOrderList(book.id)}" 
+                                                 value="Add To your Cart" 
+                                                 styleClass="#{orderBean.orderedAlready(book.id) ? 'btn btn-primary form-control ordered-highlight':'btn btn-primary form-control'}">
+                                </h:commandButton>
+                            </h:form>
+                        </div>
+                    </p:carousel>
+                </div>
+                
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

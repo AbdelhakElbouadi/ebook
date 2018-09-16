@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pass="http://xmlns.jcp.org/jsf/passthrough">
+    <h:body>
+        <ui:composition template="../templates/template-general.xhtml">
+            <ui:define name="title">
+                Delivery And Pickup
+            </ui:define>
+            <ui:define name="scripting">
+                <h:outputScript library="default" name="script/default.js" />
+            </ui:define>
+                
+            <ui:define name="content">
+                <div>
+                    <div class="steps">
+                        <h:form>
+                            <p:steps activeIndex="0" styleClass="custom" readonly="true" style="padding: 35px;">
+                                <p:menuitem class="delivery-item" value="Delivery" />
+                                <p:menuitem class="payment-item" value="Payment" />
+                                <p:menuitem class="orderplaced-item" value="Order Placed" />
+                            </p:steps>
+                        </h:form>
+                    </div>
+                        
+                    <div>      
+                        <h:form id="shipping-address-form" class="form-horizontal">
+                            <div class="shipping-address">
+                                <h:panelGroup>
+                                    <h:messages errorClass="alert alert-danger" 
+                                                infoClass="alert alert-success"
+                                                warnClass="alert alert-warning">
+                                    </h:messages>
+                                </h:panelGroup>
+                                
+                                <p class="well">Provide Shipping Address</p>
+                                <!--Shipping Address-->
+                                <div class="form-group row">
+                                    <h:outputLabel class="control-label col-md-3" for="fname" 
+                                                   value="First Name"/>
+                                    <div class="col-md-9">
+                                        <div class="input-group col-md-5">
+                                            <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                                            <h:inputText id="fname" class="form-control" 
+                                                         value="#{orderBean.shippingAddress.fname}"
+                                                         required="true"
+                                                         requiredMessage="The First Name is Required.">
+                                            </h:inputText>
+                                        </div>
+                                        <h:message for="fname" class="alert alert-danger col-md-4" />
+                                    </div>
+                                </div>
+                                    
+                                <div class="form-group row">
+                                    <h:outputLabel class="control-label col-md-3" for="lname" 
+                                                   value="Last Name"/>
+                                    <div class="col-md-9">
+                                        <div class="input-group col-md-5">
+                                            <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                                            <h:inputText id="lname" class="form-control" 
+                                                         value="#{orderBean.shippingAddress.lname}" 
+                                                         required="true"
+                                                         requiredMessage="The Last Name is Required.">
+                                            </h:inputText>
+                                        </div>
+                                        <h:message for="lname" class="alert alert-danger col-md-4" />
+                                    </div>
+                                </div>
+                                    
+                                <div class="form-group row">
+                                    <h:outputLabel class="control-label col-md-3" for="addr1" 
+                                                   value="Address Line1" />
+                                    <div class="col-md-9">
+                                        <div class="input-group col-md-5">
+                                            <span class="input-group-addon"><i class="fa fa-address-card fa" aria-hidden="true"></i></span>
+                                            <h:inputText id="addr1" class="form-control" 
+                                                         value="#{orderBean.shippingAddress.addrLine1}" 
+                                                         required="true"
+                                                         requiredMessage="The Address is Required.">
+                                            </h:inputText>
+                                        </div>
+                                        <h:message for="addr1" class="alert alert-danger col-md-4" />
+                                    </div>
+                                        
+                                </div>
+                                    
+                                <div class="form-group row">
+                                    <h:outputLabel class="control-label col-md-3" for="addr2" 
+                                                   value="Address Line2" />
+                                    <div class="col-md-9">
+                                        <div class="input-group col-md-5">
+                                            <span class="input-group-addon"><i class="fa fa-address-card fa" aria-hidden="true"></i></span>
+                                            <h:inputText id="addr2" class="form-control" 
+                                                         value="#{orderBean.shippingAddress.addrLine2}">
+                                            </h:inputText>
+                                        </div>
+                                        <h:message for="addr2" class="alert alert-danger col-md-4" />
+                                    </div>
+                                </div>
+                                    
+                                <div class="form-group row">
+                                    <h:outputLabel class="control-label col-md-3" for="city" 
+                                                   value="City" />
+                                    <div class="col-md-9">
+                                        <div class="input-group col-md-5">
+                                            <span class="input-group-addon"><i class="fa fa-black-tie fa" aria-hidden="true"></i></span>
+                                            <h:inputText id="city" class="form-control" 
+                                                         value="#{orderBean.shippingAddress.city}" 
+                                                         required="true"
+                                                         requiredMessage="The City is Required.">
+                                            </h:inputText>    
+                                        </div>
+                                        <h:message for="city" class="alert alert-danger col-md-4" />
+                                    </div>   
+                                </div>
+                                    
+                                <div class="form-group row">
+                                    <h:outputLabel class="control-label col-md-3" for="state" 
+                                                   value="State" />
+                                    <div class="col-md-9">
+                                        <div class="input-group col-md-5">
+                                            <span class="input-group-addon"><i class="fa fa-black-tie fa" aria-hidden="true"></i></span>
+                                            <h:inputText id="state" class="form-control" 
+                                                         value="#{orderBean.shippingAddress.state}" 
+                                                         required="true"
+                                                         requiredMessage="The State is Required.">
+                                            </h:inputText>
+                                        </div>
+                                        <h:message for="state" class="alert alert-danger col-md-4" />
+                                    </div> 
+                                </div>
+                                    
+                                <div class="form-group row">
+                                    <h:outputLabel class="control-label col-md-3" for="country" 
+                                                   value="Country" />
+                                    <div class="col-md-9">
+                                        <div class="input-group col-md-5">
+                                            <span class="input-group-addon"><i class="fa fa-black-tie fa" aria-hidden="true"></i></span>
+                                            <h:inputText id="country" class="form-control" 
+                                                         value="#{orderBean.shippingAddress.country}" 
+                                                         required="true"
+                                                         requiredMessage="The Country is Required.">
+                                            </h:inputText>
+                                        </div>
+                                        <h:message for="country" class="alert alert-danger col-md-4" />
+                                    </div>
+                                </div>
+                                    
+                                <div class="form-group row">
+                                    <h:outputLabel class="control-label col-md-3" for="zipcode" 
+                                                   value="ZipCode" />
+                                    <div class="col-md-9">
+                                        <div class="input-group col-md-5">
+                                            <span class="input-group-addon"><i class="fa fa-black-tie fa" aria-hidden="true"></i></span>
+                                            <h:inputText id="zipcode" class="form-control" 
+                                                         value="#{orderBean.shippingAddress.zipCode}" 
+                                                         required="true"
+                                                         requiredMessage="The Zipcode is Required.">
+                                            </h:inputText>
+                                        </div>
+                                        <h:message for="zipcode" class="alert alert-danger col-md-4" />
+                                    </div>
+                                </div>
+                                    
+                                <div class="form-group row">
+                                    <h:outputLabel class="control-label col-md-3" for="email" 
+                                                   value="Email" />
+                                    <div class="col-md-9">
+                                        <div class="input-group col-md-5">
+                                            <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                                            <h:inputText id="email" class="form-control" 
+                                                         value="#{orderBean.shippingAddress.email}"
+                                                         required="true"
+                                                         requiredMessage="Give a valid email Ex:company@server.com">
+                                                <f:validateRegex pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$" />
+                                            </h:inputText>
+                                        </div>
+                                        <h:message for="email" class="alert alert-danger col-md-4" />
+                                    </div>  
+                                </div>
+                                    
+                                <div class="form-group row">
+                                    <h:outputLabel class="control-label col-md-3" for="phone" 
+                                                   value="Phone" />
+                                    <div class="col-md-9">
+                                        <div class="input-group col-md-5">
+                                            <span class="input-group-addon"><i class="fa fa-phone fa" aria-hidden="true"></i></span>
+                                            <h:inputText id="phone" class="form-control" 
+                                                         value="#{orderBean.shippingAddress.phone}" 
+                                                         required="true"
+                                                         requiredMessage="The Phone is Required.">
+                                            </h:inputText>
+                                        </div>
+                                        <h:message for="phone" class="alert alert-danger col-md-4" />
+                                    </div>  
+                                </div>
+                            </div>
+                                
+                                
+                            <div class="use-one-address">
+                                <h:selectBooleanCheckbox value="#{orderBean.useTwoAddress}" >
+                                    <f:ajax event="change" execute="@form" render="billing-address-area"
+                                            listener="#{orderBean.useOneAddressOnly()}" />
+                                </h:selectBooleanCheckbox>
+                                <h:outputText value="&nbsp;&nbsp;Use Different Address For Billing" />
+                            </div>
+                                
+                                
+                            <h:panelGroup id="billing-address-area">
+                                <h:panelGroup rendered="#{orderBean.useTwoAddress}">
+                                    <div class="billing-address"> 
+                                        
+                                        
+                                        <h:panelGroup>
+                                            <h:messages errorClass="alert alert-danger" 
+                                                        infoClass="alert alert-success"
+                                                        warnClass="alert alert-warning">
+                                            </h:messages>
+                                        </h:panelGroup>
+                                        
+                                        <p class="well">Provide Billing Address</p>
+                                            
+                                        <!--Billing Address-->
+                                        <div class="form-group row">
+                                            <h:outputLabel class="control-label col-md-3" for="b-fname" 
+                                                           value="First Name"/>
+                                            <div class="col-md-9">
+                                                <div class="input-group col-md-5">
+                                                    <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                                                    <h:inputText id="b-fname" class="form-control" 
+                                                                 value="#{orderBean.billingAddress.fname}">
+                                                    </h:inputText>
+                                                </div>
+                                                <h:message for="b-fname" class="alert alert-danger col-md-4" />
+                                            </div>
+                                        </div>
+                                            
+                                        <div class="form-group row">
+                                            <h:outputLabel class="control-label col-md-3" for="b-lname" 
+                                                           value="Last Name"/>
+                                            <div class="col-md-9">
+                                                <div class="input-group col-md-5">
+                                                    <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                                                    <h:inputText id="b-lname" class="form-control" 
+                                                                 value="#{orderBean.billingAddress.lname}" >
+                                                    </h:inputText>
+                                                </div>
+                                                <h:message for="b-lname" class="alert alert-danger col-md-4" />
+                                            </div>
+                                        </div>
+                                            
+                                        <div class="form-group row">
+                                            <h:outputLabel class="control-label col-md-3" for="b-addr1" 
+                                                           value="Address Line1" />
+                                            <div class="col-md-9">
+                                                <div class="input-group col-md-5">
+                                                    <span class="input-group-addon"><i class="fa fa-address-card fa" aria-hidden="true"></i></span>
+                                                    <h:inputText id="b-addr1" class="form-control" 
+                                                                 value="#{orderBean.billingAddress.addrLine1}" >
+                                                    </h:inputText>
+                                                </div>
+                                                <h:message for="b-addr1" class="alert alert-danger col-md-4" />
+                                            </div>
+                                                
+                                        </div>
+                                        <div class="form-group row">
+                                            <h:outputLabel class="control-label col-md-3" for="b-addr2" 
+                                                           value="Address Line2" />
+                                            <div class="col-md-9">
+                                                <div class="input-group col-md-5">
+                                                    <span class="input-group-addon"><i class="fa fa-address-card fa" aria-hidden="true"></i></span>
+                                                    <h:inputText id="b-addr2" class="form-control" 
+                                                                 value="#{orderBean.billingAddress.addrLine2}">
+                                                    </h:inputText>
+                                                </div>
+                                                <h:message for="b-addr2" class="alert alert-danger col-md-4" />
+                                            </div>
+                                        </div>
+                                            
+                                        <div class="form-group row">
+                                            <h:outputLabel class="control-label col-md-3" for="b-city" 
+                                                           value="City" />
+                                            <div class="col-md-9">
+                                                <div class="input-group col-md-5">
+                                                    <span class="input-group-addon"><i class="fa fa-black-tie fa" aria-hidden="true"></i></span>
+                                                    <h:inputText id="b-city" class="form-control" 
+                                                                 value="#{orderBean.billingAddress.city}" >
+                                                    </h:inputText>    
+                                                </div>
+                                                <h:message for="b-city" class="alert alert-danger col-md-4" />
+                                            </div>   
+                                        </div>
+                                        <div class="form-group row">
+                                            <h:outputLabel class="control-label col-md-3" for="b-state" 
+                                                           value="State" />
+                                            <div class="col-md-9">
+                                                <div class="input-group col-md-5">
+                                                    <span class="input-group-addon"><i class="fa fa-black-tie fa" aria-hidden="true"></i></span>
+                                                    <h:inputText id="b-state" class="form-control" 
+                                                                 value="#{orderBean.billingAddress.state}" >
+                                                    </h:inputText>
+                                                </div>
+                                                <h:message for="b-state" class="alert alert-danger col-md-4" />
+                                            </div> 
+                                        </div>
+                                        <div class="form-group row">
+                                            <h:outputLabel class="control-label col-md-3" for="b-country" 
+                                                           value="Country" />
+                                            <div class="col-md-9">
+                                                <div class="input-group col-md-5">
+                                                    <span class="input-group-addon"><i class="fa fa-black-tie fa" aria-hidden="true"></i></span>
+                                                    <h:inputText id="b-country" class="form-control" 
+                                                                 value="#{orderBean.billingAddress.country}" >
+                                                    </h:inputText>
+                                                </div>
+                                                <h:message for="b-country" class="alert alert-danger col-md-4" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <h:outputLabel class="control-label col-md-3" for="b-zipcode" 
+                                                           value="ZipCode" />
+                                            <div class="col-md-9">
+                                                <div class="input-group col-md-5">
+                                                    <span class="input-group-addon"><i class="fa fa-black-tie fa" aria-hidden="true"></i></span>
+                                                    <h:inputText id="b-zipcode" class="form-control" 
+                                                                 value="#{orderBean.billingAddress.zipCode}" >
+                                                    </h:inputText>
+                                                </div>
+                                                <h:message for="b-zipcode" class="alert alert-danger col-md-4" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <h:outputLabel class="control-label col-md-3" for="b-email" 
+                                                           value="Email" />
+                                            <div class="col-md-9">
+                                                <div class="input-group col-md-5">
+                                                    <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                                                    <h:inputText id="b-email" class="form-control" 
+                                                                 value="#{orderBean.billingAddress.email}" >
+                                                        <f:validateRegex pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$" />
+                                                    </h:inputText>
+                                                </div>
+                                                <h:message for="b-email" class="alert alert-danger col-md-4" />
+                                            </div>  
+                                        </div>
+                                            
+                                        <div class="form-group row">
+                                            <h:outputLabel class="control-label col-md-3" for="b-phone" 
+                                                           value="Phone" />
+                                            <div class="col-md-9">
+                                                <div class="input-group col-md-5">
+                                                    <span class="input-group-addon"><i class="fa fa-phone fa" aria-hidden="true"></i></span>
+                                                    <h:inputText id="b-phone" class="form-control" 
+                                                                 value="#{orderBean.billingAddress.phone}">
+                                                    </h:inputText>
+                                                </div>
+                                                <h:message for="b-phone" class="alert alert-danger col-md-4" />
+                                            </div>  
+                                        </div>    
+                                    </div>
+                                </h:panelGroup>      
+                            </h:panelGroup>
+                                
+                                
+                            <hr />
+                                
+                            <div class="shipment-method">
+                                <h:outputText id="shipment-cost" class="alert alert-info" style="display: inline-block; width: 450px;"
+                                              value="#{orderBean.shipmentCost}" />
+                                <h:selectOneRadio value="#{orderBean.shipmentMethod}" layout="pageDirection" >
+                                    <f:selectItem itemLabel="&nbsp;Free No-Rush Shipping" itemValue="FreeNoRush" />
+                                    <f:selectItem itemLabel="&nbsp;Free Standard Shipping" itemValue="Standard" />
+                                    <f:selectItem itemLabel="&nbsp;5$ Two-Day Shipping" itemValue="Priority" />
+                                    <f:selectItem itemLabel="&nbsp;10$ One-Day Shipping" itemValue="Paid" />
+                                    <f:ajax event="click" execute="@form" render="shipment-cost continue-btn" 
+                                            listener="#{orderBean.calculateShipmentCost()}" />
+                                </h:selectOneRadio> 
+                            </div>
+                                
+                            <div style="margin: 25px 0px; padding: 15px;">
+                                <h:panelGroup id="continue-btn">
+                                    <h:panelGroup rendered="#{not empty orderBean.shipmentMethod}" >
+                                        <div class="row">
+                                            <h:commandButton class="btn btn-primary col-md-offset-4 col-md-3" value="Continue" 
+                                                             action="#{orderBean.configureDeliveryStage()}">
+                                            </h:commandButton>
+                                        </div>     
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </div>
+                        </h:form>    
+                    </div>   
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
